@@ -43,28 +43,39 @@ var twitter = function()
 //var spotify = require('spotify');
 var spotifythissong = function()
 {
-	var spotify = require('spotify');
+	var spotify = require("spotify");
  
-	spotify.search({ type: 'track', query: 'dancing in the moonlight' }, function(err, data) {
+
+	    var songName = ""; 
+	    var songs = process.argv;
+
+	    for (var i = 2; i < songs.length; i++) {
+
+	    	songName = songName + " " + songs[i];
+	    		    	    	
+	    		data.push({
+		        'artist(s)': songs[i].artists.map(getArtistNames),
+		        'song name: ': songs[i].name,
+		        'preview song: ': songs[i].preview_url,
+		        'album: ': songs[i].album.name,
+	    		})
+
+	    }
+	 	console.log("Searching for" + songName);
+	 	
+	spotify.search({ type: 'track', query: songName }, function(err, data) {
+
 	    if ( err ) {
 	        console.log('Error occurred: ' + err);
 	        return;
 	    }
-	    var data = []; //empty array to hold data
-	    for (var i = 0; i < songs.length; i++) {
-	    	data.push({
-	    		'Artist(s):':
-				'The song name:':
-				'Preview link:':
-				'Album:':
-	    	})
-	    	songs[i]
-	    }
-	 	
-	 	console.log(data);
-	    // Do something with 'data' 
+	    console.log(JSON.stringify(data, null, 2));
 	});
 }
+
+
+
+
 var request = require('request');
 
 //run this on load of js file
