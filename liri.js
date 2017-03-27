@@ -8,7 +8,7 @@
 var twitter = function()
 {
 	var stuffINeed = require("./key.js");
-	// var fs = require('fs');
+	var fs = require('fs');
 	// var twitter = require('twitter');
 
 	console.log("________________________________");
@@ -27,53 +27,79 @@ var twitter = function()
 	  	    var data = []; //empty array to hold data
       		for (var i = 0; i < tweets.length; i++) 
       		{
-        	data.push({
-            'created at: ' : tweets[i].created_at,
-            'Tweets: ' : tweets[i].text,
-        	});
-
-	    // console.log(tweets);
-	    console.log(data);
+        	var twitterResult = 
+        	tweets[i].user.screen_name + ": " + "\r\n" +
+            "created at" + ": " + tweets[i].created_at + "\r\n" + 
+            "Tweets" + ": " + tweets[i].text + "\r\n"
+        	
+	    console.log(twitterResult);
 	  		}
 
-		};
+		}
+		else {
+				console.log("Error :"+ error);
+				return;
+			}
+
 	});
 }
 
-//var spotify = require('spotify');
+
 var spotifythissong = function()
 {
 	var spotify = require("spotify");
  
 
-	    var songName = ""; 
-	    var songs = process.argv;
+	    var songName = process.argv[3]; 
 
-	    for (var i = 2; i < songs.length; i++) {
+	    if(!songName){
+			songName = "The Sign";
 
-	    	songName = songName + " " + songs[i];
-	    		    	    	
-	    		data.push({
-		        'artist(s)': songs[i].artists.map(getArtistNames),
-		        'song name: ': songs[i].name,
-		        'preview song: ': songs[i].preview_url,
-		        'album: ': songs[i].album.name,
-	    		})
+				var defaultResult = 
+	        	"Artist: " + "Ace of Base" + "\r\n" + 
+		        "Song: " + songName + "\r\n";
 
+
+		        console.log(defaultResult);
+		}
+
+	   	spotify.search({ type: 'track', query: songName }, function(err, data) {
+
+	    if (!err) {
+
+	    	var songInfo = data.tracks.items;
+
+	    	for (var i = 2; i < songInfo.length; i++) {
+	        
+	    	if (songInfo[i] != undefined) {
+
+	        	var spotifyResult = 
+	        	"Artist: " + songInfo[i].artists[0].name + "\r\n" + 
+		        "Song: " + songInfo[i].name + "\r\n" + 
+		        "A preview link of the song from Spotify: " + songInfo[i].preview_url + "\r\n" + 
+		        "The album that the song is from: " + songInfo[i].album.name + "\r\n";
+
+		        console.log(spotifyResult);
+
+	        	}
+	        }
 	    }
-	 	console.log("Searching for" + songName);
-	 	
-	spotify.search({ type: 'track', query: songName }, function(err, data) {
 
-	    if ( err ) {
-	        console.log('Error occurred: ' + err);
+
+	    else {
+	    	console.log('Error occurred: ' + err);
 	        return;
 	    }
-	    console.log(JSON.stringify(data, null, 2));
-	});
+
+		});
+
 }
 
 
+var movieThis = function()
+{
+	
+}
 
 
 var request = require('request');
@@ -89,6 +115,10 @@ var runThis = function(argValue) {
 	else if(argValue == "spotify-this-song")
 	{
 		spotifythissong();
+	}
+	else if(argValue == "movie-this")
+	{
+		movieThis();
 	}
 };
 
