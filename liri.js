@@ -83,6 +83,8 @@ function movieDetails(movie) {
 
     var queryURL = "http://www.omdbapi.com/?t=" + movie + "&y=&plot=short&tomatoes=true&r=json";
     request(queryURL, function(error, response, body) {
+                             
+                    
         console.log('=========================');
         console.log("Title: " + JSON.parse(body).Title);
         console.log("Year: " + JSON.parse(body).Year);
@@ -94,6 +96,7 @@ function movieDetails(movie) {
         console.log("Rotten Tomatoes Rating:  " + JSON.parse(body).tomatoMeter);
         console.log("Rotten Tomatoes URL: " + JSON.parse(body).tomatoURL);
         console.log('=========================');
+        
     });
     fs.appendFile("log.txt", "\nMovie Name: " + movie + "\n************");
 }
@@ -138,12 +141,14 @@ inquirer.prompt([{
                 inquirer.prompt([{
                     type: "input",
                     message: "Enter a movie: ",
-                    name: "movieName"
+                    name: "movieName",
+                    default: "Mr.Nobody"
                 }]).then(function(movie) {
                     var movie = movie.movieName;
-                    if (movie === undefined) {
-                        movie = "Mr.Nobody";
-                    }   
+                    if(movie===undefined){
+                        movie="Mr.Nobody";
+                        
+                    }  
                     movieDetails(movie);
                 });
 
